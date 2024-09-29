@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple file upload</title>
+</head>
+
+<body>
+    <p>Choose file from your device and request.</p>
+    <form id="form">
+        <input type="file" name="" id="file" multiple>
+        <button type="submit">upload file to server</button>
+    </form>
+
+    <script>
+        const fileSelect = document.getElementById("file");
+        const form = document.getElementById("form");
+
+        let file = null
+
+        fileSelect.addEventListener("change", (event) => {
+            event.preventDefault()
+            file = event.target.files[0]
+        })
+
+        form.addEventListener("submit", (event) => {
+            event.preventDefault()
+
+            const formData = new FormData();
+            formData.append("username", "manoj444")
+            for (let i = 0; i < fileSelect.files.length; i++) {
+                formData.append(`file${i}`, fileSelect.files[i])
+            }
+
+            uploadFile(formData)
+            // console.log("Form submit", file)
+        })
+
+        async function uploadFile(formData) {
+            try {
+                const response = await fetch("http://localhost:8080/upload-file", {
+                    method: "POST",
+                    body: formData
+                })
+                console.log(response)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    </script>
+</body>
+
+</html>
