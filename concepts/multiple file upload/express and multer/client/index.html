@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form sender
+    </title>
+</head>
+
+<body>
+    <!-- Student Registration Form -->
+    <div class="single-file-form">
+        <h3>Student Registration Form</h3>
+        <form action="" id="single-file">
+            <input type="text" name="name" id="student-name" placeholder="student name" required>
+            <input type="number" name="age" id="student-age" placeholder="student age" required>
+            <input type="file" name="avatar" id="student-photo" accept="image/*" required>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+    <!-- PDF file submission Form -->
+    <div class="multiple-file-form">
+        <h3>Assignment Submission Form</h3>
+        <Form id="assignment-file">
+            <input type="file" name="pdf file" id="pdf-file" multiple required>
+            <input type="text" name="student name" id="assignment-student" placeholder="submitted by" required>
+            <button type="submit">Submit Assignment</button>
+        </Form>
+    </div>
+
+    <!-- script -->
+    <script>
+        const studentName = document.getElementById("student-name")
+        const studentAge = document.getElementById("student-age")
+        const avatar = document.getElementById("student-photo")
+        const pdfFile = document.getElementById("pdf-file")
+
+        const studentForm = document.getElementById("single-file")
+        const assignmentForm = document.getElementById("assignment-file")
+
+        async function submitMultipartForm(formData, endPoint = "") {
+            try {
+                const response = await fetch(`http://localhost:8080/${endPoint}`, {
+                    method: "POST",
+                    body: formData
+                })
+                return response
+            } catch (error) {
+                console.error(`Error submitting form ${error}`)
+            }
+        }
+
+        // register event
+        studentForm.addEventListener("submit", async (event) => {
+            event.preventDefault()
+            const studentDetails = new FormData()
+
+            studentDetails.append("name", studentName.value)
+            studentDetails.append("age", studentAge.value)
+            studentDetails.append("avatar", avatar.files[0])
+
+            const response = await submitMultipartForm(studentDetails, "student-register")
+            console.log(response)
+        })
+
+        // assignment form submit event
+        assignmentForm.addEventListener("submit", async (event) => {
+            event.preventDefault()
+
+            const files = new FormData()
+
+            for (let i = 0; i < pdfFile.files.length; i++) {
+                // when using multer should match 'files' later to get the files by the multer
+                files.append("files", pdfFile.files[i])
+            }
+
+            const response = await submitMultipartForm(files, "assignment")
+            console.log("Assignment form submit", response)
+        })
+    </script>
+</body>
+
+</html>
