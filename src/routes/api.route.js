@@ -3,6 +3,9 @@ const multer = require("multer");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
+const JobQueue = require("../jobQueue/queue");
+
+const job = new JobQueue();
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -29,8 +32,26 @@ router.post("/upload-images", upload.array("photos", 5), (req, res) => {
   const { targetFormat, userUploadId } = req.body;
   console.log(`convert  to ${targetFormat} for token: ${userUploadId}`);
 
+  const imageRootPath = path.join(__dirname, `../storage/raw/${userUploadId}`);
+
   // push the images to job queue with user token and use that token to get the image after conversion.
-  const imagesPathToConvert = ["path1", "path2", "path3", "path4", "path5"];
+  if (!fs.existsSync(imageRootPath)) {
+    return res.status(500).json({ message: "Internal error" });
+  }
+
+  const imagesPathToConvert = fs
+    .readdir(imageRootPath)
+    .map((image) =>
+      path.join(__dirname, `../storage/raw/${userUploadId}`, image)
+    );
+
+  const imageConvertJob = {
+    imagesPathToConvert,
+    targetFormat,
+  };
+
+  // enqueue the new job to the worker queue
+  job.enqueueJob(imageConvertJob);
 
   res
     .status(200)
