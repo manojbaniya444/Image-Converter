@@ -1,20 +1,23 @@
 const { Worker } = require("worker_threads");
 const path = require("path");
 
-const runWorker = (imagesPath, targetFormat) => {
+const runWorker = (imagesPath, targetImageFormat, userUploadId) => {
   return new Promise((resolve, reject) => {
-    const worker = new Worker(
-      path.join(__dirname, "../worker/imageConvert.js", {
-        WorkerData: {
-          imagesPath,
-          targetFormat,
-        },
-      })
-    );
+    const workerPath = path.join(__dirname, "../worker/imageConvert.js");
+
+    const worker = new Worker(workerPath, {
+      workerData: {
+        imagesPath,
+        targetImageFormat,
+        userUploadId,
+      },
+    });
+
     worker.on("error", (error) => {
       console.log("ERROR: Error on worker thread: ", error);
       reject(error);
     });
+
     worker.on("message", (message) => {
       console.log(message);
       resolve();
@@ -47,13 +50,12 @@ class JobQueue {
 
   async executeJob(job) {
     // execute the job here
-    if (this.currentJob) {
-      return;
-    }
+    console.log("INFO: Executing job", job);
     // perfrom conversion
-    const { imagesPathToConvert, targetFormat } = job;
+    const { imagesPathToConvert, targetFormat, userUploadId } = job;
     try {
-      await runWorker(imagesPathToConvert, targetFormat);
+      console.log("INFO: Running worker thread for job");
+      await runWorker(imagesPathToConvert, targetFormat, userUploadId);
     } catch (error) {
       console.log("ERROR: Error on executing job", error);
     }
@@ -62,6 +64,7 @@ class JobQueue {
   }
 
   executeNextJob() {
+    console.log("INFO: Executing next job", this.jobs);
     if (this.currentJob) {
       return;
     }
