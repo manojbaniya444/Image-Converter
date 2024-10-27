@@ -1,5 +1,9 @@
 const { Worker } = require("worker_threads");
 const path = require("path");
+const fs = require("fs");
+const imageProcessingStatus = require("../db/status.json");
+
+const COMPLETED_STATUS = "completed";
 
 const runWorker = (imagesPath, targetImageFormat, userUploadId) => {
   return new Promise((resolve, reject) => {
@@ -54,9 +58,22 @@ class JobQueue {
     // perfrom conversion
     const { imagesPathToConvert, targetFormat, userUploadId } = job;
     try {
-      console.log("INFO: Running worker thread for job");
+      console.log("INFO: Running worker thread for job", job);
       await runWorker(imagesPathToConvert, targetFormat, userUploadId);
       // update the database for the user upload id with processing status as false.
+      const allStatus = imageProcessingStatus.imageStatus;
+      const updatedStatus = allStatus.map((imageStatus) => {
+        if (imageStatus.userUploadId === userUploadId) {
+          console.log("INFO: Updating status for user upload id", userUploadId);
+          imageStatus = { ...imageStatus, status: COMPLETED_STATUS };
+        }
+        return imageStatus;
+      });
+      imageProcessingStatus.imageStatus = updatedStatus;
+      fs.writeFileSync(
+        path.join(__dirname, "../db/status.json"),
+        JSON.stringify(imageProcessingStatus, null, 2)
+      );
     } catch (error) {
       console.log("ERROR: Error on executing job", error);
     }
