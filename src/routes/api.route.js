@@ -26,5 +26,24 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post("/upload-images", upload.array("photos", 5), imageUploadHandler);
+router.post("/download-images-path", (req, res) => {
+  const { token } = req.body;
+  const filePath = path.join(__dirname, `../storage/new/${token}`);
+  const isExist = fs.existsSync(filePath);
+
+  if (!isExist) {
+    return res.status(404).json({ message: "Images path not found" });
+  }
+
+  const allImagesName = fs.readdirSync(filePath);
+  const allImagesPath = allImagesName.map((image) => {
+    return path.join(__dirname, `../storage/new/${token}`, image);
+  });
+  res.json({
+    message: "Images path",
+    imagesPath: allImagesPath,
+    allImagesName,
+  });
+});
 
 module.exports = router;

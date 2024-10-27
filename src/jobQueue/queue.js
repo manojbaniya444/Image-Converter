@@ -20,7 +20,7 @@ const runWorker = (imagesPath, targetImageFormat, userUploadId) => {
 
     worker.on("message", (message) => {
       console.log(message);
-      resolve();
+      resolve(message);
     });
     worker.on("exit", (code) => {
       if (code !== 0) {
@@ -56,6 +56,7 @@ class JobQueue {
     try {
       console.log("INFO: Running worker thread for job");
       await runWorker(imagesPathToConvert, targetFormat, userUploadId);
+      // update the database for the user upload id with processing status as false.
     } catch (error) {
       console.log("ERROR: Error on executing job", error);
     }

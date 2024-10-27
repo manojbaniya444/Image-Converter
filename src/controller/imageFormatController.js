@@ -1,5 +1,8 @@
 const JobQueue = require("../jobQueue/queue");
 const job = new JobQueue();
+const imageProcessingStatus = require("../db/status.json");
+
+const PROCESSING = "processing";
 
 const fs = require("fs").promises;
 const path = require("path");
@@ -34,6 +37,23 @@ const imageUploadHandler = async (req, res) => {
 
   // enqueue the new job to the worker queue
   job.enqueueJob(imageConvertJob);
+
+  // save in database
+  imageProcessingStatus.imageStatus.push({
+    userUploadId,
+    status: PROCESSING,
+  });
+
+  // Write the updated status back to the JSON file
+  try {
+    await fs.writeFile(
+      path.join(__dirname, "../db/status.json"),
+      JSON.stringify(imageProcessingStatus, null, 2)
+    );
+  } catch (error) {
+    console.log("ERROR: Error on updating status", error);
+    return res.status(500).json({ message: "Internal error" });
+  }
 
   res.status(200).json({
     message: "images uploaded to convert please wait to download.",

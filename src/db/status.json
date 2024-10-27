@@ -1,0 +1,104 @@
+{
+  "imageStatus": [
+    {
+      "userUploadId": "abc123",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730018799806-431088026",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730018858646-466545848",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730019463809-821457547",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730019553392-648191390",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730019571721-613351076",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730019696876-792583446",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730020401249-111098514",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730020507087-882955740",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730020635306-789252234",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730020895413-372295152",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730020929414-627410694",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730021378454-531749510",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730021421656-48735068",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730021462213-492131438",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730021481111-390251031",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730021499943-223654929",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730021512794-742843703",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730021643491-742833130",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730021724837-816309825",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730021766261-850239752",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730021777256-123794905",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730021786566-393981286",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730021889774-394420933",
+      "status": "processing"
+    },
+    {
+      "userUploadId": "1730021926219-759151161",
+      "status": "processing"
+    }
+  ]
+}
