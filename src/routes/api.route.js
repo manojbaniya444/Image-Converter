@@ -46,4 +46,24 @@ router.post("/download-images-path", (req, res) => {
   });
 });
 
+router.post("/download-image", (req, res) => {
+  const { token, filename } = req.body;
+  console.log("Request download : ", token, filename);
+
+  const filePath = path.join(__dirname, `../storage/new/${token}/${filename}`);
+
+  const isPathExist = fs.existsSync(filePath);
+
+  if (!isPathExist) {
+    return res.status(404).json({ message: "Image not found" });
+  }
+
+  res.download(filePath, (error) => {
+    if (error) {
+      console.log("Error downloading the file: ", error);
+      res.status(500).json({ message: "Error downloading the file" });
+    }
+  });
+});
+
 module.exports = router;

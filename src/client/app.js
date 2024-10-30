@@ -86,7 +86,28 @@ fetchImagesPathButton.addEventListener("click", async () => {
     list.appendChild(downloadButton);
 
     downloadButton.addEventListener("click", async () => {
-      console.log(`Downloading ${image}`);
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/download-image",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token, filename: image }),
+          }
+        );
+        const blob = await response.blob();
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        const imageOriginalNameEndIndex = image.indexOf("-");
+        const imageOriginalName = image.slice(0, imageOriginalNameEndIndex);
+        link.download = imageOriginalName;
+        link.click();
+        link.remove();
+      } catch (error) {
+        console.error(error);
+      }
     });
   });
   imageContainer.appendChild(list);
