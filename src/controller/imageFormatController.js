@@ -101,8 +101,24 @@ const downloadImage = async (req, res) => {
   });
 };
 
+const checkStatus = async (req, res) => {
+  const { token } = req.body;
+  const status = imageProcessingStatus.imageStatus.find(
+    (image) => image.userUploadId === token
+  );
+
+  if (!status) {
+    return res.status(404).json({ message: "Status not found" });
+  }
+
+  console.log("user pool request")
+
+  res.json({ message: "Status", status });
+};
+
 module.exports = {
   imageUploadHandler,
   downloadImagesPathHandler,
   downloadImage,
+  checkStatus
 };

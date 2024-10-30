@@ -7,6 +7,7 @@ const {
   imageUploadHandler,
   downloadImagesPathHandler,
   downloadImage,
+  checkStatus,
 } = require("../controller/imageFormatController");
 
 const storage = multer.diskStorage({
@@ -34,5 +35,7 @@ router.post("/upload-images", upload.array("photos", 5), imageUploadHandler);
 router.post("/download-images-path", downloadImagesPathHandler);
 
 router.post("/download-image", downloadImage);
+
+router.post("/check-status", checkStatus);
 
 module.exports = router;
