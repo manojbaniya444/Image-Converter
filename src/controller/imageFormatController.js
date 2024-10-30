@@ -61,4 +61,48 @@ const imageUploadHandler = async (req, res) => {
   });
 };
 
-module.exports = { imageUploadHandler };
+const downloadImagesPathHandler = async (req, res) => {
+  const { token } = req.body;
+  const filePath = path.join(__dirname, `../storage/new/${token}`);
+  const isExist = fsSync.existsSync(filePath);
+
+  if (!isExist) {
+    return res.status(404).json({ message: "Images path not found" });
+  }
+
+  const allImagesName = fsSync.readdirSync(filePath);
+  const allImagesPath = allImagesName.map((image) => {
+    return path.join(__dirname, `../storage/new/${token}`, image);
+  });
+  res.json({
+    message: "Images path",
+    imagesPath: allImagesPath,
+    allImagesName,
+  });
+};
+
+const downloadImage = async (req, res) => {
+  const { token, filename } = req.body;
+  console.log("Request download : ", token, filename);
+
+  const filePath = path.join(__dirname, `../storage/new/${token}/${filename}`);
+
+  const isPathExist = fsSync.existsSync(filePath);
+
+  if (!isPathExist) {
+    return res.status(404).json({ message: "Image not found" });
+  }
+
+  res.download(filePath, (error) => {
+    if (error) {
+      console.log("Error downloading the file: ", error);
+      res.status;
+    }
+  });
+};
+
+module.exports = {
+  imageUploadHandler,
+  downloadImagesPathHandler,
+  downloadImage,
+};

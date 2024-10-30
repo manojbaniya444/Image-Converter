@@ -3,6 +3,8 @@ const sharp = require("sharp");
 const fs = require("fs");
 const path = require("path");
 
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const runImageConversion = async (
   imagesPath,
   targetImageFormat,
@@ -13,6 +15,8 @@ const runImageConversion = async (
   fs.mkdirSync(path.join(__dirname, `../storage/new/${userUploadId}`));
 
   for (const pathImage of imagesPath) {
+    // artificial delay to simulate image conversion process longer
+    await delay(2000);
     if (!fs.existsSync(pathImage)) {
       console.log(`ERROR: File not found: ${pathImage}`);
       continue;

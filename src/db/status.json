@@ -1,19 +1,11 @@
 {
   "imageStatus": [
     {
-      "userUploadId": "1730023634874-78967481",
-      "status": "completed"
+      "userUploadId": "test",
+      "status": "processing"
     },
     {
-      "userUploadId": "1730023647897-518144327",
-      "status": "completed"
-    },
-    {
-      "userUploadId": "1730023657376-690169287",
-      "status": "completed"
-    },
-    {
-      "userUploadId": "1730276666922-305987300",
+      "userUploadId": "1730277921230-893663895",
       "status": "completed"
     }
   ]

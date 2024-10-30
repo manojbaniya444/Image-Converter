@@ -3,7 +3,11 @@ const multer = require("multer");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
-const { imageUploadHandler } = require("../controller/imageFormatController");
+const {
+  imageUploadHandler,
+  downloadImagesPathHandler,
+  downloadImage,
+} = require("../controller/imageFormatController");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -26,44 +30,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post("/upload-images", upload.array("photos", 5), imageUploadHandler);
-router.post("/download-images-path", (req, res) => {
-  const { token } = req.body;
-  const filePath = path.join(__dirname, `../storage/new/${token}`);
-  const isExist = fs.existsSync(filePath);
 
-  if (!isExist) {
-    return res.status(404).json({ message: "Images path not found" });
-  }
+router.post("/download-images-path", downloadImagesPathHandler);
 
-  const allImagesName = fs.readdirSync(filePath);
-  const allImagesPath = allImagesName.map((image) => {
-    return path.join(__dirname, `../storage/new/${token}`, image);
-  });
-  res.json({
-    message: "Images path",
-    imagesPath: allImagesPath,
-    allImagesName,
-  });
-});
-
-router.post("/download-image", (req, res) => {
-  const { token, filename } = req.body;
-  console.log("Request download : ", token, filename);
-
-  const filePath = path.join(__dirname, `../storage/new/${token}/${filename}`);
-
-  const isPathExist = fs.existsSync(filePath);
-
-  if (!isPathExist) {
-    return res.status(404).json({ message: "Image not found" });
-  }
-
-  res.download(filePath, (error) => {
-    if (error) {
-      console.log("Error downloading the file: ", error);
-      res.status(500).json({ message: "Error downloading the file" });
-    }
-  });
-});
+router.post("/download-image", downloadImage);
 
 module.exports = router;
