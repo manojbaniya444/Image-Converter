@@ -26,7 +26,7 @@ async function getImageStatus(token) {
   }
 }
 
-function displayImages(imagesPath) {
+function displayImages(imagesPath, token) {
   const imageContainer = document.getElementById("image-container");
   imageContainer.innerHTML = "";
   const list = document.createElement("div");
@@ -79,7 +79,7 @@ function poolRequestForImagePath(token) {
 
       const response = await fetchImagesPath(token);
       const imagesPath = response.allImagesName;
-      displayImages(imagesPath);
+      displayImages(imagesPath, token);
     } else {
       console.log("not completed yet");
     }
@@ -114,7 +114,7 @@ fetchImagesPathButton.addEventListener("click", async () => {
   const response = await fetchImagesPath(token);
   const imagesPath = response.allImagesName;
 
-  displayImages(imagesPath);
+  displayImages(imagesPath, token);
 });
 
 form.addEventListener("submit", async (event) => {
