@@ -108,12 +108,12 @@ const checkStatus = async (req, res) => {
   );
 
   if (!status) {
-    return res.status(404).json({ message: "Status not found" });
+    return res.status(404).json({ message: "Status not found", status: "error" });
   }
 
-  console.log("user pool request")
+  console.log("user pool request", status)
 
-  res.json({ message: "Status", status });
+  res.json({ message: "Status", status: status.status });
 };
 
 module.exports = {
