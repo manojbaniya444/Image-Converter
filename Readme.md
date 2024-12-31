@@ -33,6 +33,7 @@ class JobQueue {
 
 We will have some methods in the JobQueue class.
 
+### 2. Enqueue Method
 The first one is enqueue which simple takes the `job` parameter that is the actual job from the user, enqueue it and the call `executeNext()` method. This method is described later.
 
 ```javascript
@@ -45,7 +46,7 @@ enqueue(job) {
     return;
 }
 ```
-
+### 3. Execute Next Job
 Method `executeNext()` simply run the jobQueue by performing as a watchman who looks for the job if there is no current job get one from the queue and then execute it.
 
 But we need to check first if the worker if performing some task or free then only execute next. We can get that info from `currentJob` value that we defined in the constructor().
@@ -108,6 +109,7 @@ const executeJob = (job) => {
 };
 ```
 
+### 4. Adding new Job to the Queue
 Now our code is ready and ready to test. For this, we create some jobs and see the result.
 
 ```javascript
